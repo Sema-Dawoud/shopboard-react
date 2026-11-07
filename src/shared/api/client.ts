@@ -10,12 +10,20 @@ export class ApiError extends Error {
   }
 }
 
-export async function fetchJson(path: string): Promise<unknown> {
+function isAbortError(error: unknown): boolean {
+  return error instanceof Error && error.name === 'AbortError';
+}
+
+export async function fetchJson(
+  path: string,
+  signal?: AbortSignal,
+): Promise<unknown> {
   let response: Response;
 
   try {
-    response = await fetch(`${API_BASE_URL}${path}`);
-  } catch {
+    response = await fetch(`${API_BASE_URL}${path}`, { signal });
+  } catch (error: unknown) {
+    if (signal?.aborted || isAbortError(error)) throw error;
     throw new ApiError('Unable to connect to the product service.');
   }
 
@@ -29,7 +37,8 @@ export async function fetchJson(path: string): Promise<unknown> {
   try {
     const body: unknown = await response.json();
     return body;
-  } catch {
+  } catch (error: unknown) {
+    if (signal?.aborted || isAbortError(error)) throw error;
     throw new ApiError('The product service returned invalid JSON.');
   }
 }

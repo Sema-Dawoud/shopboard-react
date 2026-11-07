@@ -15,7 +15,7 @@ ShopBoard is a skincare store built with React, TypeScript, and Vite.
 7. Use mobile-first responsive CSS.
 8. Avoid `any`, type assertions, and non-null assertions.
 9. Do not add dependencies without a clear need.
-10. Run build, lint, and formatting checks after changes.
+10. Run `npm run typecheck`, `npm run lint`, `npm run format:check`, and `npm run build` after changes.
 
 ## Code Quality
 
@@ -28,7 +28,7 @@ ShopBoard is a skincare store built with React, TypeScript, and Vite.
 ## Lessons Learned from Debugging
 
 1. Always provide a unique and stable key when rendering lists. Prefer item IDs over array indexes.
-2. Use explicit numeric conditions such as `stock > 0` in JSX instead of `stock &&` to avoid rendering zero.
+2. Historical lesson: use an explicit condition such as `stock > 0` instead of `stock &&` to avoid rendering zero. The old `stock > 0` example refers to historical code; the current `ProductCard` uses the boolean `product.inStock`, and the old expression is not present in current code.
 3. Never use array indexes as keys when list items can be reordered.
 4. Never mutate the original array when sorting. Create a copy using `[...items].sort()`.
 5. Never mutate React state directly. Always create new arrays and objects when updating state.
